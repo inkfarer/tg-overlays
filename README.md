@@ -1,6 +1,6 @@
-# sos-overlays
+# tg-overlays
 
-A [NodeCG](http://github.com/nodecg/nodecg) bundle.
+A [NodeCG](http://github.com/nodecg/nodecg) bundle for Testing Grounds, an [Inkling Performance Labs](https://iplabs.ink/) tournament.
 
 ## Screenshots
 
