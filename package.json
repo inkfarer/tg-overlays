@@ -1,7 +1,7 @@
 {
-"name": "sos-overlays",
+"name": "tg-overlays",
 "version": "0.0.0",
-"description": "Overlays Swim or Sink, a weekly Splatoon tournament.",
+"description": "Overlays Testing Grounds, a bi-weekly Splatoon tournament.",
 "homepage": "",
 "author": {
 	"name": "inkfarer",
@@ -26,7 +26,7 @@
 			"title": "Scoring",
 			"width": 2,
 			"file": "scoring.html",
-			"workspace": "sos",
+			"workspace": "testing grounds",
 			"headerColor": "#262F40"
 		},
 		{
@@ -34,7 +34,7 @@
 			"title": "Music",
 			"width": 3,
 			"file": "music.html",
-			"workspace": "sos",
+			"workspace": "testing grounds",
 			"headerColor": "#262F40"
 		},
 		{
@@ -42,7 +42,7 @@
 			"title": "Break Screen",
 			"width": 2,
 			"file": "breakScreen.html",
-			"workspace": "sos",
+			"workspace": "testing grounds",
 			"headerColor": "#262F40"
 		},
 		{
@@ -50,7 +50,7 @@
 			"title": "Map Winners",
 			"width": 4,
 			"file": "mapWinners.html",
-			"workspace": "sos",
+			"workspace": "testing grounds",
 			"headerColor": "#262F40"
 		},
 		{
@@ -58,7 +58,7 @@
 			"title": "Import tournament data",
 			"width": 2,
 			"file": "tourneyImport.html",
-			"workspace": "sos setup",
+			"workspace": "tg setup",
 			"headerColor": "#262F40"
 		},
 		{
@@ -66,7 +66,7 @@
 			"title": "Map Lists",
 			"width": 6,
 			"file": "mapLists.html",
-			"workspace": "sos setup",
+			"workspace": "tg setup",
 			"headerColor": "#262F40"
 		}
 	],

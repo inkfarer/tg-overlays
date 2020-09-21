@@ -3,61 +3,71 @@
 const currentBreakScene = nodecg.Replicant('currenBreakScene', { defaultValue: 'mainScene' });
 
 currentBreakScene.on('change', (newValue, oldValue) => {
+	let delay = 0.25;
+	let stagesAnimLen = 0;
+
+	if (oldValue === 'maps') {
+		delay = 0.5;
+	}
+
 	switch (newValue) {
 		case 'mainScene':
-			showMainScene();
-			hideAltBG();
+			stagesAnimLen = toggleStages(false);
+			if (oldValue === 'maps') {
+				delay = delay + stagesAnimLen;
+			}
+			toggleMainScene(true, delay);
+			toggleNextUp(false);
+			setBackgroundColor('#3E0099', '#2E0073', delay);
 			return;
 		case 'nextUp':
-			hideMainScene();
-			showAltBG();
-			toggleMaps(false);
-			let animDelay = 0.6;
-			if (oldValue === 'mainScene') animDelay = 1.2;
-			toggleNextUp(true, animDelay);
+			stagesAnimLen = toggleStages(false);
+			if (oldValue === 'maps') {
+				delay = delay + stagesAnimLen;
+			}
+			toggleMainScene(false);
+			toggleNextUp(true, delay);
+			setBackgroundColor('#EB8258', '#C46C49', delay);
 			return;
 		case 'maps':
-			hideMainScene();
-			showAltBG();
-			toggleMaps(true, 0.3);
+			toggleMainScene(false);
 			toggleNextUp(false);
+			toggleStages(true);
+			setBackgroundColor('#D64550', '#B03842');
 	}
 });
 
-function hideMainScene() {
-	gsap.to(['.bgContentImage', '.bgWaterTexture', '.mainScene'], {duration: 1.5, top: -1280, ease: 'power2.inOut'});
+function setBackgroundColor(clr1, clr2, delay = 0) {
+	gsap.to(':root', {duration: 1.5, '--bgColor1': clr1, '--bgColor2': clr2, delay: delay});
 }
 
-function showMainScene() {
-	gsap.to(['.bgContentImage', '.bgWaterTexture', '.mainScene'], {duration: 1.5, top: 0, ease: 'power2.inOut'});
+function toggleMainScene(show, delay = 0) {
+	let opacity = show ? 1 : 0;
+	gsap.to('.mainScene', {duration: 0.5, opacity: opacity, delay: delay});
 }
 
-function showAltBG() {
-	gsap.to('.sceneAlt', {duration: 1.5, top: 0, ease: 'power2.inOut'});
-}
-
-function hideAltBG() {
-	gsap.to('.sceneAlt', {duration: 1.5, top: 1280, ease: 'power2.inOut'});
-}
-
-function toggleMaps(show, delay = 0) {
+function toggleStages(show, delay = 0) {
 	const stageElems = document.querySelectorAll('.stageElem');
 
 	let scoreboardDelay = 0;
+	let animLength = 0;
 
 	let delays;
 	switch (stageElems.length) {
 		case 7:
 			delays = [0, 0.15, 0.3, 0.45, 0.3, 0.15, 0];
 			scoreboardDelay = 0.3;
+			animLength = 0.45;
 			break;
 		case 5:
 			delays = [0, 0.15, 0.3, 0.15, 0];
 			scoreboardDelay = 0.15;
+			animLength = 0.3;
 			break;
 		case 3:
 			delays = [0, 0.15, 0];
 			scoreboardDelay = 0.1;
+			animLength = 0.15;
 			break;
 	}
 
@@ -81,11 +91,13 @@ function toggleMaps(show, delay = 0) {
 		const element = stageElems[i];
 		gsap.to(element, {duration: 0.25, opacity: opacity, delay: delays[i], ease: 'power2.inOut'});
 	}
+
+	return animLength;
 }
 
 function toggleNextUp(show, delay = 0) {
 	if (show) {
-		gsap.to('.nextTeamInfoContainer', {duration: 0.25, opacity: 1, delay: delay});
+		gsap.to('.sceneTeams', {duration: 0.25, opacity: 1, delay: delay});
 		let teamAPlayers = document.querySelectorAll('.nextTeamAPlayer');
 		let teamBPlayers = document.querySelectorAll('.nextTeamBPlayer');
 
@@ -103,7 +115,7 @@ function toggleNextUp(show, delay = 0) {
 			gsap.to(element, {opacity: 1, duration: 0.25, delay: (j * 0.05) + (delay * 1.2)});
 		};
 	} else {
-		gsap.to('.nextTeamInfoContainer', {duration: 0.25, opacity: 0});
+		gsap.to('.sceneTeams', {duration: 0.25, opacity: 0});
 	}
 }
 
@@ -128,8 +140,8 @@ function measureText(text, fontFamily, fontSize, maxWidth, useInnerHTML = false)
 }
 
 const breakMainTextProps = {
-	fontFamily: "'Dosis', 'Kosugi Maru', 'Roboto'",
-	fontSize: '45px',
+	fontFamily: "'Raleway', 'Kosugi Maru', 'Roboto'",
+	fontSize: '42px',
 	maxWidth: 650
 }
 
@@ -161,7 +173,7 @@ mainFlavorText.on('change', newValue => {
 const casterNames = nodecg.Replicant('casterNames', { defaultValue: "We don't know." });
 
 casterNames.on('change', newValue => {
-	let finalElem = newValue.replaceAll('[[', '<span class="pronoun">').replaceAll(']]', '</span>');
+	let finalElem = newValue.replace(/\[\[/g, '<span class="pronoun">').replace(/\]\]/g, '</span>');
 	setMainSceneText(finalElem, document.querySelector('#breakCasters'), true, true);
 });
 
@@ -212,7 +224,7 @@ NodeCG.waitForReplicants(nowPlaying, nowPlayingManual, mSongEnabled).then(() => 
 NodeCG.waitForReplicants(nowPlaying, nowPlayingManual, mSongEnabled).then(() => {
 	nowPlaying.on('change', newValue => {
 		if (!mSongEnabled.value) {
-			
+
 		}
 	});
 	mSongEnabled.on('change', newValue => {
@@ -225,7 +237,7 @@ NodeCG.waitForReplicants(nowPlaying, nowPlayingManual, mSongEnabled).then(() => 
 	});
 	nowPlayingManual.on('change', newValue => {
 		if (mSongEnabled.value) {
-			
+
 		}
 	});
 });
@@ -266,18 +278,18 @@ nextStageTime.on('change', newValue => {
 });
 
 function getGridRows(showTimer, showMusic) {
-	let gridStyle = '4fr 1fr 1px 1fr';
+	let gridStyle = '1.75fr 1fr 1fr';
 
 	if (showTimer) {
-		gridStyle += ' 1px 1fr';
+		gridStyle += ' 1fr';
 	} else {
-		gridStyle += ' 0px 0fr';
+		gridStyle += ' 0fr';
 	}
 
 	if (showMusic) {
-		gridStyle += ' 1px 1fr';
+		gridStyle += ' 1fr';
 	} else {
-		gridStyle += ' 0px 0fr';
+		gridStyle += ' 0fr';
 	}
 
 	return gridStyle;
@@ -286,7 +298,7 @@ function getGridRows(showTimer, showMusic) {
 const NSTimerShown = nodecg.Replicant('NSTimerShown', {defaultValue: false});
 const musicShown = nodecg.Replicant('musicShown', { defaultValue: true });
 
-function animToggleInfo(showTimer, showMusic, infoElem, elemShown, divider) {
+function animToggleInfo(showTimer, showMusic, infoElem, elemShown) {
 	let gridStyle = getGridRows(showTimer, showMusic), gridDelay, elemOpacity, elemDelay;
 	if (elemShown) {
 		elemOpacity = 1;
@@ -298,21 +310,20 @@ function animToggleInfo(showTimer, showMusic, infoElem, elemShown, divider) {
 		gridDelay = 0.4;
 	}
 
-	gsap.to(divider, {duration: 0.5, opacity: elemOpacity, ease: 'power2.inOut'});
 	gsap.to(infoElem, {duration: 0.5, opacity: elemOpacity, delay: elemDelay, ease: 'power2.inOut'});
 	gsap.to('.mainSceneGrid', {duration: 0.5, gridTemplateRows: gridStyle, ease: 'power2.inOut', delay: gridDelay});
 }
 
 NodeCG.waitForReplicants(NSTimerShown, musicShown).then(() => {
 	NSTimerShown.on('change', newValue => {
-		animToggleInfo(newValue, musicShown.value, '#breakTimer', newValue, '#timeDivider');
+		animToggleInfo(newValue, musicShown.value, '#breakTimer', newValue);
 	});
 
 	musicShown.on('change', newValue => {
-		animToggleInfo(NSTimerShown.value, newValue, '#breakMusic', newValue, '#musicDivider');
+		animToggleInfo(NSTimerShown.value, newValue, '#breakMusic', newValue);
 	});
 });
-	
+
 
 // teams
 
@@ -432,30 +443,33 @@ function createMapListElems(maplist) {
 
 		let mapsHTML = '';
 		let elemWidth = '260';
-		let fontSize = '2.25em';
+		let fontSize = '2em';
 		let elemOpacity = '1';
+		let winnerFontSize = '1.7em';
 
 		if (maplist.length === 4) {
 			elemWidth = '380';
 			stagesGrid.style.width = '1200px';
+			winnerFontSize = '2em';
 		} else if (maplist.length === 6) {
 			elemWidth = '260';
 			stagesGrid.style.width = '1400px';
-			fontSize = '2.05em;'
-		} else if (maplist.length === 8) { 
+			fontSize = '1.9em;'
+			winnerFontSize = '1.9em';
+		} else if (maplist.length === 8) {
 			elemWidth = '200';
 			stagesGrid.style.width = '1600px';
-			fontSize = '2em';
+			fontSize = '1.75em';
 		}
 
-		if (currentBreakScene.value === 'nextUp') { elemOpacity = '0'; }
+		if (currentBreakScene.value !== 'maps') { elemOpacity = '0'; }
 
 		for (let i = 1; i < maplist.length; i++) {
 			const element = maplist[i];
 			let elem = `
 			<div class="stageElem" style="opacity: ${elemOpacity}">
 				<div class="stageImage" style="background-image: url('img/stages/${mapNameToImagePath[element.map]}');">
-					<div class="stageWinner" id="stageWinner_${i}" style="opacity: 0"></div>
+					<div class="stageWinner" id="stageWinner_${i}" style="opacity: 0; font-size: ${winnerFontSize}"></div>
 				</div>
 				<div class="stageInfo">
 					<div class="stageMode">
@@ -469,7 +483,7 @@ function createMapListElems(maplist) {
 		}
 
 		stagesGrid.innerHTML = mapsHTML;
-		setWinners(mapWinners.value)		
+		setWinners(mapWinners.value)
 	}});
 
 	gsap.to(stagesGrid, {duration: 0.5, opacity: 1, delay: 0.5});
@@ -508,7 +522,7 @@ window.addEventListener('load', () => {
 		mapWinners.on('change', (newValue, oldValue) => {
 			setWinners(newValue);
 		});
-		
+
 		SBData.on('change', newValue => {
 			setWinners(mapWinners.value);
 
@@ -538,7 +552,7 @@ function setWinner(index, name, shown) {
 
 	if (shown) { opacity = 1; }
 	else { opacity = 0 };
-	
+
 	if (shown) {
 		winnerElem.innerText = name;
 	}
@@ -558,49 +572,7 @@ teamScores.on('change', newValue => {
 	document.querySelector('#teamBScore').setAttribute('text', newValue.teamB);
 });
 
-// Particles
+// Background anim loop
 
-function getRandomInt(min, max) {
-	return Math.random() * (max - min) + min;
-}
-
-function makeParticles(count) {
-	// Create particle and animate it
-	let container = document.querySelector('.particles');
-	for (let i = 0; i < count; i++) {
-		let element = document.createElement('div');
-		element.classList.add('particle');
-		element.id = `particle_${i}`
-		container.appendChild(element);
-		makeParticleAnim(`particle_${i}`);
-	}
-}
-
-makeParticles(25);
-
-function makeParticleAnim(id) {
-	// Animate particle with random position and size
-	let size = getRandomInt(25, 100);
-	let particle = document.querySelector(`#${id}`);
-	particle.style.width = size + 'px';
-	particle.style.height = size + 'px';
-	particle.style.left = getRandomInt(0, 1920) + 'px';
-	particle.style.opacity = '1';
-	particle.style.transform = 'translate3d(0px, 0px, 0px)';
-	let animDur = getRandomInt(5, 10);
-	let opacDelay = animDur - 1.1;
-	let XMovement = getRandomInt(25, 50);
-	let wobbleSpeed = getRandomInt(3, 5);
-	let repeatCount = Math.floor(animDur / wobbleSpeed);
-	let wobbleTL = gsap.timeline({repeat: repeatCount});
-	wobbleTL.fromTo(particle, {x: (XMovement * -1)}, {duration: wobbleSpeed, x: XMovement, ease: 'sine.inOut'});
-	wobbleTL.to(particle, {duration: wobbleSpeed, x: (XMovement * -1), ease: 'sine.inOut'});
-	gsap.fromTo(particle, {opacity: 1}, {duration: 1, opacity: 0, delay: opacDelay, ease: 'none'});
-	gsap.fromTo(particle, {bottom: (size * -1), opacity: 1}, {duration: animDur, bottom: 980, ease: 'none', onComplete: () => {
-		repeatParticleAnim(id);
-	}});
-}
-
-function repeatParticleAnim(id) {
-	makeParticleAnim(id);
-}
+var bgTL = gsap.timeline({repeat: -1});
+bgTL.fromTo('.contentBG', {y: -240}, {duration: 5, ease: Power0.easeNone, y: -480});

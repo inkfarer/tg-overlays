@@ -49,7 +49,7 @@ submitId.onclick = () => {
 							name: addDots(elementPlayer.inGameName),
 							//just in case...
 							//why does everybody have like, three names?
-							username : addDots(elementPlayer.username)
+							username: addDots(elementPlayer.username)
 						};
 						teamInfo.players.push(playerInfo);
 					}
@@ -60,12 +60,13 @@ submitId.onclick = () => {
 				setStatusSuccess();
 			})
 			.catch(err => {
-				console.log("err " + err);
+				console.error(err);
 				setStatusFailure();
 			});
 }
 
 function addDots(string) {
+	if (!string) return string;
 	if (string.length >= maxNameLength) return string.substring(0, maxNameLength) + '...';
 	else return string;
 }
