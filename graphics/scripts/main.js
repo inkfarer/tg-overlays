@@ -60,18 +60,18 @@ const SBShown = nodecg.Replicant('SBShown', {defaultValue: true});
 SBShown.on('change', newValue => {
 	var lineClipPath, lineDelay, bgTop, bgEase, bgDelay, flavorOpacity;
 	if (newValue) {
-		lineClipPath = 'polygon(0px 0px, 300px 0px, 300px 300px, 0px 300px)';
+		lineClipPath = 'polygon(0px 0px, 306px 0px, 306px 49px, 0px 49px)';
 		bgTop = '0px';
 		bgEase = 'power2.out';
-		bgDelay = 0.4;
+		bgDelay = 0;
 		lineDelay = 0;
 		flavorOpacity = 1;
 	} else {
-		lineClipPath = 'polygon(0px 0px, 0px 0px, 0px 300px, 0px 300px)';
-		bgTop = '90px';
+		lineClipPath = 'polygon(0px 0px, 306px 0px, 306px 0px, 0px 0px)';
+		bgTop = '93px';
 		bgEase = 'power2.in';
 		bgDelay = 0;
-		lineDelay = 0.4;
+		lineDelay = 0;
 		flavorOpacity = 0;
 	}
 

@@ -19,7 +19,7 @@
 			top: 40px;
             left: 50px;
             height: 140px;
-            width: 300px;
+            width: 306px;
 		}
 
 		.sbBackground {
@@ -27,20 +27,36 @@
 			top: 0px;
 			height: 90px;
 			width: 300px;
-			background-color:#222;
-			border-radius: 3px 3px 0px 0px;
+			background-color:white;
+			border-radius: 5px 5px 0 0;
 			display: grid;
 			grid-template-columns: 6fr 1fr;
 			grid-template-rows: 1fr 1px 1fr;
 			grid-template-areas: "a b" "c c" "d e";
+			border: 3px solid transparent;
+			background-clip: padding-box;
+		}
+
+		.sbBackground::before {
+			content: '';
+			position: absolute;
+			width: calc(100% + 6px);
+			height: 100%;
+			top: 0;
+			left: 0;
+			z-index: -1;
+			margin: -3px;
+			border-radius: inherit;
+			background: linear-gradient(to left, #3E0099, #FFE80A);
 		}
 
 		.sbBGWrapper {
 			position: absolute;
 			top: 0px;
-			height: 90px;
-			width: 300px;
+			height: 92px;
+			width: 306px;
 			overflow: hidden;
+			border-radius: 5px 5px 0 0;
 		}
 
 		.colorContainer {
@@ -73,14 +89,16 @@
 			font-weight: 700;
 			font-size: 1.8em;
 			margin-top: 3px;
+			max-height: 41px;
+			color: black;
 		}
 
 		.score {
 			font-weight: 600;
 			font-size: 2em;
-			color: white;
+			color: black;
 			text-align: center;
-			background-color: #111;
+			background-color: #eee;
 			font-family: 'Montserrat';
 			border-radius: 0 3px 0 0;
 			padding: 2px 4px;
@@ -98,23 +116,24 @@
 
 		.sbBrandLine {
 			position: absolute;
-			bottom: 5px;
-			height: 45px;
-			width: 300px;
+			bottom: 1px;
+			height: 49px;
+			width: 306px;
 			background-image: url('img/tg-sbtopbar.png');
+			background-size: 306px;
 			background-size: fit;
 			background-repeat: no-repeat;
 			z-index: 10;
-			clip-path: polygon(0px 0px, 300px 0px, 300px 300px, 0px 300px);
+			clip-path: polygon(0px 0px, 306px 0px, 306px 49px, 0px 49px);
 		}
 
 		.sbFlavorTextBG {
 			position: absolute;
-			bottom: 16px;
+			bottom: 11px;
 			right: 0;
 			height: 25px;
-			width: calc(100% - 55px);
-			background-color: #222;
+			width: calc(100% - 60px);
+			background-color: #eee;
 			border-radius: 3px;
 			display: flex;
 			align-items: center;
@@ -124,17 +143,14 @@
 
 
 		.sbFlavorTextBG fitted-text {
-			color: white;
+			color: black;
 			text-align: center;
 			font-size: 1em;
 			font-weight: 600;
 		}
-
-		.teamInfo {
-			max-height: 41px;
-		}
 		
 		.sbLine {
+			background: linear-gradient(to left, #3E0099, #FFE80A);
 			background-color: #3E0099;
 			grid-area: c;
 			height: 1px;
