@@ -52,6 +52,7 @@
 			top: 0;
 			padding: 0;
 			margin: 0;
+			flex-direction: column;
 		}
 
 		.scene {
@@ -62,28 +63,37 @@
 		}
 
 		.scene.mainScene {
-			border: 3px solid white;
-			width: 1100px;
-			height: 850px;
+			width: 1920px;
+			height: 1080px;
 			display: grid;
 			grid-template-columns: 1fr;
 			align-items: center;
 			justify-items: center;
-			background-color: #222;
-			border-radius: 15px;
+			align-self: center;
+			right: 0px;
 		}
 
 		.mainSceneGrid {
-			width: 1000px;
-			height: 700px;
+			margin-top: -100px;
+			width: 1500px;
+			height: 750px;
 			display: grid;
 			grid-template-columns: 1fr;
-			grid-template-rows: 1fr 1fr 1px 1fr 1px 1fr 1px 1fr;
+			grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
 			justify-items: center;
 		}
 
+		.mainSceneLogo {
+			position: relative;
+			width: 857px;
+			height: 400px;
+		}
+
 		.mainSceneLogo img {
-			width: 1000px;
+			position: absolute;
+			height: 400px;
+			top: 0;
+			left: 0;
 		}
 
 		.infoBox {
@@ -122,6 +132,7 @@
 			font-size: 42px;
 			height: 68px;
 			margin-top: 6px;
+			color: black;
 		}
 
 		.infoBoxIcon {
@@ -129,7 +140,7 @@
 			height: 67px;
 			margin-top: 0px;
 			width: 72px;
-			background-color: white;
+			background-color: var(--bgColor1);
 			position: absolute;
 			left: 0px;
 			top: 0;
@@ -144,8 +155,8 @@
 		}
 
 		.infoBoxBG {
-			background-color: #111;
-			border-bottom: 4px solid white;
+			background-color: #eee;
+			border-bottom: 4px solid var(--bgColor1);
 			border-radius: 5px;
 			height: 63px;
 			width: 155px;
@@ -156,10 +167,15 @@
 			z-index: 3;
 		}
 
-		.mainSceneSeparator {
-			width: 3px;
-			height: 650px;
-			background-color: white;
+		.gridBG {
+			width: 1920px;
+			height: 1080px;
+			position: absolute;
+			z-index: -5;
+			top: 0;
+			left: 85px;
+			background-repeat: no-repeat;
+			background-image: url('./img/dots1.png');
 		}
 
 		.measurer {
@@ -172,11 +188,6 @@
 
 		.sceneAlt {
 			margin-top: -3px;
-		}
-
-		.altSceneBG {
-			background-image: url('./img/sos-breakBG2.png');
-			z-index: -90;
 		}
 
 		.sceneTeams, .sceneStages {
@@ -196,7 +207,7 @@
 			width: 1400px;
 			gap: 25px;
 			position: absolute;
-			bottom: 150px;
+			bottom: 175px;
 		}
 
 		.stageImage {
@@ -205,7 +216,7 @@
 			background-size: cover;
 			height: 500px;
 			border-radius: 10px;
-			border: 3px solid white;
+			border: 3px solid var(--bgColor1);
 
 			position: relative;
 		}
@@ -213,14 +224,14 @@
 		.stageInfo {
 			text-align: center;
 			border-radius: 10px;
-			border: 3px solid white;
+			border: 3px solid var(--bgColor1);
 			margin-top: 10px;
 			overflow: hidden;
 		}
 
 		.stageMode {
 			margin: 0;
-			background-color: white;
+			background-color: #eee;
 			font-size: 2em;
 			font-weight: 700;
 			padding: 5px 0;
@@ -232,9 +243,9 @@
 		}
 
 		.stageName {
-			background-color: #222;
+			background-color: white;
 			padding: 5px 0;
-			color: white;
+			color: black;
 			font-size: 2.25em;
 			margin: 0;
 			height: 87px;
@@ -269,15 +280,16 @@
 			height: 65px;
 
 			position: absolute;
-			top: 125px;
+			top: 100px;
 
 			display: grid;
 			grid-template-rows: 1fr;
 			grid-template-columns: 5fr 0.5fr 5fr;
 			
-			background-color: #222;
+			color: black;
+			background-color: white;
 			border-radius: 10px;
-			border: 3px solid white;
+			border: 3px solid var(--bgColor1);
 
 			overflow: hidden;
 		}
@@ -290,7 +302,7 @@
 
 		.teamNameBG fitted-text {
 			font-size: 2.5em;
-			color: white;
+			color: black;
 			margin: 10px;
 			margin-top: 5px;
 		}
@@ -300,7 +312,8 @@
 		}
 
 		.teamScoreBG {
-			background-color: white;
+			background-color: var(--bgColor1);
+			color: white;
 			width: 65px;
 			height: 65px;
 			display: flex;
@@ -332,14 +345,16 @@
 
 		.ipl-powered {
 			position: absolute;
-			bottom: -95px;
+			bottom: 45px;
 			width: 400px;
+			z-index: 999;
 		}
 
 		.sceneTeams {
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			align-self: center;
 
 			width: 1300px;
 			height: 700px;
@@ -360,7 +375,7 @@
 		.nextVersus {
 			font-size: 10em;
 			font-weight: 700;
-			color: white;
+			color: black;
 			text-align: center;
 			align-self: center;
 		}
@@ -369,16 +384,21 @@
 			border-radius: 15px;
 			overflow: hidden;
 			width: 475px;
-			border: 3px solid white;
+			border: 3px solid var(--bgColor1);
 		}
 
 		.nextTeamTitleBG {
-			background-color: white;
+			background-color: #eee;
 			height: 100px;
 			font-weight: 700;
 			font-size: 3.5em;
 			display: flex;
 			align-items: center;
+			justify-content: flex-end;
+		}
+
+		.nextRightTitleBG {
+			justify-content: flex-start;
 		}
 
 		.nextTeamTitleBG fitted-text {
@@ -387,12 +407,8 @@
 			color: black;
 		}
 
-		.nextLeftTitleBG {
-			justify-content: flex-end;
-		}
-
 		.nextTeamPlayersBG {
-			background-color: #222;
+			background-color: white;
 			height: calc(100% - 75px);
 			margin-top: -25px;
 			border-radius: 15px;
@@ -402,7 +418,7 @@
 		}
 
 		.nextTeamPlayersBG fitted-text {
-			color: white;
+			color: black;
 			font-size: 40px;
 			margin: 0 20px;
 			height: 52px;
@@ -410,10 +426,14 @@
 
 		span.pronoun {
 			font-size: 20px;
-			background-color: white;
+			background-color: var(--bgColor1);
 			padding: 0 5px;
-			color: black;
+			color: white;
 		}
+
+		.logoAccent {
+			filter: invert(20%) sepia(90%) saturate(5356%) hue-rotate(263deg) brightness(58%) contrast(126%);
+		};
 	</style>
 </head>
 <body>
@@ -421,7 +441,8 @@
 		<div class="scene mainScene">
 			<div class="mainSceneGrid">
 				<div class="mainSceneLogo">
-					<img src="img/tg-horiz.png">
+					<img src="img/TG2-ylw.png">
+					<img src="img/TG2-accent.png" class="logoAccent">
 				</div>
 				<div class="infoBox noIcon" id="breakFlavorText">
 					<fitted-text class="infoBoxText" text="asdasd" max-width="650"></fitted-text>
@@ -449,10 +470,9 @@
 					<div class="infoBoxBG"></div>
 				</div>
 			</div>
-			<img src="img/ipl-powered-inkling.png" class="ipl-powered">
 		</div>
 		<div class="scene sceneStages">
-			<div class="stagesScoreboard" style="opacity: 0">
+			<div class="stagesScoreboard">
 				<div class="SBTeamWrapper">
 					<div class="teamNameBG" id="teamANameBG">
 						<fitted-text text="Team A" max-width="390" align="right" id="teamAName"></fitted-text>
@@ -461,7 +481,7 @@
 						<fitted-text text="0" max-width="60" align="right" id="teamAScore"></fitted-text>
 					</div>
 				</div>
-				<div style="background-color: white;"></div>
+				<div style="background-color: var(--bgColor1);"></div>
 				<div class="SBTeamWrapper">
 					<div class="teamScoreBG" id="teamBScoreBG">
 						<fitted-text text="1" max-width="60" align="right" id="teamBScore"></fitted-text>
@@ -492,7 +512,10 @@
 				</div>
 			</div>
 		</div>
+		<img src="img/ipl-powered-inkling-black.png" class="ipl-powered">
 	</div>
+
+	<div class="gridBG"></div>
 	<div class="contentBG"></div>
 
 	<script src="../node_modules/gsap/dist/gsap.js"></script>

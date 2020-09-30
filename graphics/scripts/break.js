@@ -1,9 +1,28 @@
 // Scene switching
 
+// Filters from https://codepen.io/sosuke/pen/Pjoqqp
+const accentColors = {
+	blue: {
+		colorA: '#3E0099',
+		colorB: '#2E0073',
+		filter: 'invert(20%) sepia(90%) saturate(5356%) hue-rotate(263deg) brightness(58%) contrast(126%)'
+	},
+	orange: {
+		colorA: '#EB8258',
+		colorB: '#C46C49',
+		filter: 'invert(59%) sepia(84%) saturate(592%) hue-rotate(323deg) brightness(98%) contrast(88%)'
+	},
+	red: {
+		colorA: '#D64550',
+		colorB: '#B03842',
+		filter: 'invert(45%) sepia(33%) saturate(5064%) hue-rotate(328deg) brightness(86%) contrast(94%)'
+	}
+};
+
 const currentBreakScene = nodecg.Replicant('currenBreakScene', { defaultValue: 'mainScene' });
 
 currentBreakScene.on('change', (newValue, oldValue) => {
-	let delay = 0.25;
+	let delay = 0;
 	let stagesAnimLen = 0;
 
 	if (oldValue === 'maps') {
@@ -18,7 +37,7 @@ currentBreakScene.on('change', (newValue, oldValue) => {
 			}
 			toggleMainScene(true, delay);
 			toggleNextUp(false);
-			setBackgroundColor('#3E0099', '#2E0073', delay);
+			setAccentColor(accentColors.blue, 0.5);
 			return;
 		case 'nextUp':
 			stagesAnimLen = toggleStages(false);
@@ -27,77 +46,44 @@ currentBreakScene.on('change', (newValue, oldValue) => {
 			}
 			toggleMainScene(false);
 			toggleNextUp(true, delay);
-			setBackgroundColor('#EB8258', '#C46C49', delay);
+			setAccentColor(accentColors.orange, 0.5);
 			return;
 		case 'maps':
 			toggleMainScene(false);
 			toggleNextUp(false);
 			toggleStages(true);
-			setBackgroundColor('#D64550', '#B03842');
+			setAccentColor(accentColors.red, '#B03842');
 	}
 });
 
-function setBackgroundColor(clr1, clr2, delay = 0) {
-	gsap.to(':root', {duration: 1.5, '--bgColor1': clr1, '--bgColor2': clr2, delay: delay});
+function setAccentColor(clr, delay = 0) {
+	gsap.to('.logoAccent', {duration: 1.5, filter: clr.filter, delay: delay});
+	gsap.to(':root', {duration: 1.5, '--bgColor1': clr.colorA, '--bgColor2': clr.colorB, delay: delay});
 }
 
 function toggleMainScene(show, delay = 0) {
+	let ease = 'power2.inOut';
 	let opacity = show ? 1 : 0;
-	gsap.to('.mainScene', {duration: 0.5, opacity: opacity, delay: delay});
+	let styleYTo = show ? 0 : 150;
+	let styleYFrom = show ? -150 : 0;
+	gsap.fromTo('.mainScene', {y: styleYFrom}, {duration: 0.5, opacity: opacity, delay: delay, y: styleYTo, ease: ease});
 }
 
 function toggleStages(show, delay = 0) {
-	const stageElems = document.querySelectorAll('.stageElem');
+	let opacity = show ? 1 : 0;
+	let styleYTo = show ? 0 : 150;
+	let styleYFrom = show ? -150 : 0;
 
-	let scoreboardDelay = 0;
-	let animLength = 0;
-
-	let delays;
-	switch (stageElems.length) {
-		case 7:
-			delays = [0, 0.15, 0.3, 0.45, 0.3, 0.15, 0];
-			scoreboardDelay = 0.3;
-			animLength = 0.45;
-			break;
-		case 5:
-			delays = [0, 0.15, 0.3, 0.15, 0];
-			scoreboardDelay = 0.15;
-			animLength = 0.3;
-			break;
-		case 3:
-			delays = [0, 0.15, 0];
-			scoreboardDelay = 0.1;
-			animLength = 0.15;
-			break;
-	}
-
-	let opacity = 1;
-
-	if (show) {
-		if (delay !== 0 && delays && delays.length >= 1) {
-			for (let i = 0; i < delays.length; i++) {
-				delays[i] += delay;
-			}
-			scoreboardDelay += delay;
-		}
-	} else {
-		opacity = 0;
-	}
-
-	gsap.to('.stagesScoreboard', {duration: 0.25, opacity: opacity, ease: 'power2.inOut', delay: scoreboardDelay});
-	if (stageElems.length === 0) return;
-
-	for (let i = 0; i < stageElems.length; i++) {
-		const element = stageElems[i];
-		gsap.to(element, {duration: 0.25, opacity: opacity, delay: delays[i], ease: 'power2.inOut'});
-	}
-
-	return animLength;
+	gsap.fromTo('.sceneStages', {y: styleYFrom}, {duration: 0.5, ease: 'power2.inOut', opacity: opacity, delay: delay, y: styleYTo})
 }
 
 function toggleNextUp(show, delay = 0) {
+	let ease = 'power2.inOut';
+	let opacity = show ? 1 : 0;
+	let styleYTo = show ? 0 : 150;
+	let styleYFrom = show ? -150 : 0;
+	gsap.fromTo('.sceneTeams', {y: styleYFrom}, {duration: 0.5, opacity: opacity, delay: delay, y: styleYTo, ease: ease});
 	if (show) {
-		gsap.to('.sceneTeams', {duration: 0.25, opacity: 1, delay: delay});
 		let teamAPlayers = document.querySelectorAll('.nextTeamAPlayer');
 		let teamBPlayers = document.querySelectorAll('.nextTeamBPlayer');
 
@@ -114,8 +100,6 @@ function toggleNextUp(show, delay = 0) {
 			element.style.opacity = '0';
 			gsap.to(element, {opacity: 1, duration: 0.25, delay: (j * 0.05) + (delay * 1.2)});
 		};
-	} else {
-		gsap.to('.sceneTeams', {duration: 0.25, opacity: 0});
 	}
 }
 
@@ -278,7 +262,7 @@ nextStageTime.on('change', newValue => {
 });
 
 function getGridRows(showTimer, showMusic) {
-	let gridStyle = '1.75fr 1fr 1fr';
+	let gridStyle = '2fr 1fr 1fr';
 
 	if (showTimer) {
 		gridStyle += ' 1fr';
@@ -444,7 +428,6 @@ function createMapListElems(maplist) {
 		let mapsHTML = '';
 		let elemWidth = '260';
 		let fontSize = '2em';
-		let elemOpacity = '1';
 		let winnerFontSize = '1.7em';
 
 		if (maplist.length === 4) {
@@ -457,17 +440,15 @@ function createMapListElems(maplist) {
 			fontSize = '1.9em;'
 			winnerFontSize = '1.9em';
 		} else if (maplist.length === 8) {
-			elemWidth = '200';
+			elemWidth = '190';
 			stagesGrid.style.width = '1600px';
 			fontSize = '1.75em';
 		}
 
-		if (currentBreakScene.value !== 'maps') { elemOpacity = '0'; }
-
 		for (let i = 1; i < maplist.length; i++) {
 			const element = maplist[i];
 			let elem = `
-			<div class="stageElem" style="opacity: ${elemOpacity}">
+			<div class="stageElem">
 				<div class="stageImage" style="background-image: url('img/stages/${mapNameToImagePath[element.map]}');">
 					<div class="stageWinner" id="stageWinner_${i}" style="opacity: 0; font-size: ${winnerFontSize}"></div>
 				</div>
