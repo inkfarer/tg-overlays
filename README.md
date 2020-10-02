@@ -13,6 +13,7 @@ To be added
 If you're using nodecg-cli:
 
 2.1. Run `nodecg install inkfarer/sos-overlays`.
+
 2.2. Install the dashboard by running `nodecg install inkfarer/ipl-overlay-controls`
 
 Otherwise:
