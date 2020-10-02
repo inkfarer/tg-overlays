@@ -1,6 +1,6 @@
 // Team Scores
 
-const teamScores = nodecg.Replicant('teamScores', {defaultValue: {
+const teamScores = nodecg.Replicant('teamScores', 'ipl-overlay-controls', {defaultValue: {
     teamA: 0,
     teamB: 0
 }});
@@ -12,7 +12,7 @@ teamScores.on('change', newValue => {
 
 // Scoreboard data
 
-const SBData = nodecg.Replicant('SBData', {defaultValue: {
+const SBData = nodecg.Replicant('SBData', 'ipl-overlay-controls', {defaultValue: {
 	flavorText: 'Flavor Text',
 	teamAInfo: {
 		name: "Placeholder Team 1",
@@ -42,7 +42,7 @@ SBData.on('change', newValue => {
 
 // Show/hide scoreboard
 
-const SBShown = nodecg.Replicant('SBShown', {defaultValue: true});
+const SBShown = nodecg.Replicant('SBShown', 'ipl-overlay-controls', {defaultValue: true});
 
 SBShown.on('change', newValue => {
 	var lineClipPath, lineDelay, bgTop, bgEase, bgDelay, flavorOpacity;

@@ -19,7 +19,7 @@ const accentColors = {
 	}
 };
 
-const currentBreakScene = nodecg.Replicant('currenBreakScene', { defaultValue: 'mainScene' });
+const currentBreakScene = nodecg.Replicant('currenBreakScene', 'ipl-overlay-controls', { defaultValue: 'mainScene' });
 
 currentBreakScene.on('change', (newValue, oldValue) => {
 	let delay = 0;
@@ -148,27 +148,27 @@ function setMainSceneText(text, elem, hasIcon = true, useInnerHTML = false) {
 	textTL.to(textElem, {duration: 0.5, opacity: 1});
 }
 
-const mainFlavorText = nodecg.Replicant('mainFlavorText', { defaultValue: 'Be right back!' });
+const mainFlavorText = nodecg.Replicant('mainFlavorText', 'ipl-overlay-controls', { defaultValue: 'Be right back!' });
 
 mainFlavorText.on('change', newValue => {
 	setMainSceneText(newValue, document.querySelector('#breakFlavorText'), false);
 });
 
-const casterNames = nodecg.Replicant('casterNames', { defaultValue: "We don't know." });
+const casterNames = nodecg.Replicant('casterNames', 'ipl-overlay-controls', { defaultValue: "We don't know." });
 
 casterNames.on('change', newValue => {
 	let finalElem = newValue.replace(/\[\[/g, '<span class="pronoun">').replace(/\]\]/g, '</span>');
 	setMainSceneText(finalElem, document.querySelector('#breakCasters'), true, true);
 });
 
-const nowPlaying = nodecg.Replicant('nowPlaying');
-const nowPlayingManual = nodecg.Replicant('nowPlayingManual', {
+const nowPlaying = nodecg.Replicant('nowPlaying', 'ipl-overlay-controls');
+const nowPlayingManual = nodecg.Replicant('nowPlayingManual', 'ipl-overlay-controls', {
     defaultValue: {
         artist: '',
         song: ''
     }
 });
-const mSongEnabled = nodecg.Replicant('mSongEnabled', {defaultValue: false});
+const mSongEnabled = nodecg.Replicant('mSongEnabled', 'ipl-overlay-controls', {defaultValue: false});
 
 function checkStringEmptyOrUndef(string) {
 	string = String(string);
@@ -226,7 +226,7 @@ NodeCG.waitForReplicants(nowPlaying, nowPlayingManual, mSongEnabled).then(() => 
 	});
 });
 
-const nextStageTime = nodecg.Replicant('nextStageTime', {defaultValue: {
+const nextStageTime = nodecg.Replicant('nextStageTime', 'ipl-overlay-controls', {defaultValue: {
     hour: 0,
     minute: 0,
     day: 1,
@@ -279,8 +279,8 @@ function getGridRows(showTimer, showMusic) {
 	return gridStyle;
 }
 
-const NSTimerShown = nodecg.Replicant('NSTimerShown', {defaultValue: false});
-const musicShown = nodecg.Replicant('musicShown', { defaultValue: true });
+const NSTimerShown = nodecg.Replicant('NSTimerShown', 'ipl-overlay-controls', {defaultValue: false});
+const musicShown = nodecg.Replicant('musicShown', 'ipl-overlay-controls', { defaultValue: true });
 
 function animToggleInfo(showTimer, showMusic, infoElem, elemShown) {
 	let gridStyle = getGridRows(showTimer, showMusic), gridDelay, elemOpacity, elemDelay;
@@ -311,7 +311,7 @@ NodeCG.waitForReplicants(NSTimerShown, musicShown).then(() => {
 
 // teams
 
-const nextTeams = nodecg.Replicant('nextTeams', {defaultValue: {
+const nextTeams = nodecg.Replicant('nextTeams', 'ipl-overlay-controls', {defaultValue: {
 	teamAInfo: {
 		name: "Placeholder Team 1",
 		players: [
@@ -386,7 +386,7 @@ const mapNameToImagePath = {"Ancho-V Games": "S2_Stage_Ancho-V_Games.png",
 "Skipper Pavilion":"S2_Stage_Skipper_Pavilion.png",
 "Unknown Map":"unnamed-unknown-map.png"};
 
-const maplists = nodecg.Replicant('maplists', {
+const maplists = nodecg.Replicant('maplists', 'ipl-overlay-controls', {
     defaultValue: [
         [
             { id: 0, name: "Default map list" },
@@ -397,11 +397,11 @@ const maplists = nodecg.Replicant('maplists', {
     ]
 });
 
-const currentMaplistID = nodecg.Replicant('currentMaplistID', { defaultValue: '0' });
+const currentMaplistID = nodecg.Replicant('currentMaplistID', 'ipl-overlay-controls', { defaultValue: '0' });
 
-const mapWinners = nodecg.Replicant('mapWinners', { defaultValue: [0, 0, 0, 0, 0, 0, 0] });
+const mapWinners = nodecg.Replicant('mapWinners', 'ipl-overlay-controls', { defaultValue: [0, 0, 0, 0, 0, 0, 0] });
 
-const SBData = nodecg.Replicant('SBData', {defaultValue: {
+const SBData = nodecg.Replicant('SBData', 'ipl-overlay-controls', {defaultValue: {
 	flavorText: 'Flavor Text',
 	teamAInfo: {
 		name: "Placeholder Team 1",
@@ -543,7 +543,7 @@ function setWinner(index, name, shown) {
 
 // Scoreboard on maps page
 
-const teamScores = nodecg.Replicant('teamScores', {defaultValue: {
+const teamScores = nodecg.Replicant('teamScores', 'ipl-overlay-controls', {defaultValue: {
     teamA: 0,
     teamB: 0
 }});
