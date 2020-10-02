@@ -12,19 +12,6 @@ teamScores.on('change', newValue => {
 
 // Scoreboard data
 
-const colorNameToHex = {
-	"Dark Blue": "#3535D2",
-	"Green": "#6BD921",
-	"Blue Green": "#16DD81",
-	"Purple": "#B51CCE",
-	"Yellow": "#FEF232",
-	"Light Blue": "#2ED2FE",
-	"Violet": "#8941FF",
-	"Pink": "#EF26BD",
-	"Turquoise": "#39EAB1",
-	"Orange": "#FB7B08"
-}
-
 const SBData = nodecg.Replicant('SBData', {defaultValue: {
 	flavorText: 'Flavor Text',
 	teamAInfo: {
@@ -47,8 +34,8 @@ SBData.on('change', newValue => {
 	document.querySelector('#teamAName').setAttribute('text', newValue.teamAInfo.name);
 	document.querySelector('#teamBName').setAttribute('text', newValue.teamBInfo.name);
 
-	gsap.to('#teamAColor', {duration: 0.5, backgroundColor: colorNameToHex[newValue.teamAColor]});
-	gsap.to('#teamBColor', {duration: 0.5, backgroundColor: colorNameToHex[newValue.teamBcolor]});
+	gsap.to('#teamAColor', {duration: 0.5, backgroundColor: (newValue.swapColorOrder) ? newValue.colorInfo.clrB : newValue.colorInfo.clrA});
+	gsap.to('#teamBColor', {duration: 0.5, backgroundColor: (newValue.swapColorOrder) ? newValue.colorInfo.clrA : newValue.colorInfo.clrB});
 
 	document.querySelector('.sbFlavorTextBG fitted-text').setAttribute('text', newValue.flavorText);
 });
