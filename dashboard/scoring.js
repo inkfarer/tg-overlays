@@ -49,40 +49,77 @@ tourneyData.on('change', newValue => {
 // Fill out color selectors
 
 const colors = [
-	"Dark Blue",
-	"Green",
-	"Blue Green",
-	"Purple",
-	"Yellow",
-	"Light Blue",
-	"Violet",
-	"Pink",
-	"Turquoise",
-	"Orange"
+	{
+		index: 0,
+		title: 'Green vs Grape',
+		clrA: '#37FC00',
+		clrB: '#7D28FC'
+	},
+	{
+		index: 1,
+		title: 'Green vs Magenta',
+		clrA: '#04D976',
+		clrB: '#D600AB'
+	},
+	{
+		index: 2,
+		title: 'Turquoise vs Orange',
+		clrA: '#10E38F',
+		clrB: '#FB7B08'
+	},
+	{
+		index: 3,
+		title: 'Mustard vs Purple',
+		clrA: '#FF9E03',
+		clrB: '#B909E0'
+	},
+	{
+		index: 4,
+		title: 'Dark Blue vs Green',
+		clrA: '#2F27CC',
+		clrB: '#37FC00'
+	},
+	{
+		index: 5,
+		title: 'Purple vs Green',
+		clrA: '#B909E0',
+		clrB: '#37FC00'
+	},
+	{
+		index: 6,
+		title: 'Yellow vs Blue',
+		clrA: '#FEF232',
+		clrB: '#2ED2FE'
+	}
 ];
 
 for (let i = 0; i < colors.length; i++) {
-	addSelector(colors[i], 'colorSelector');
+	addSelector(colors[i].title, 'newColorSelector', colors[i].index);
 }
 
 // Scoreboard data
 
 const SBData = nodecg.Replicant('SBData', {defaultValue: {
 	flavorText: 'Flavor Text',
+	colorInfo: {
+		index: 0,
+		title: 'Green vs Grape',
+		clrA: '#37FC00',
+		clrB: '#7D28FC'
+	},
+	swapColorOrder: false,
 	teamAInfo: {
 		name: "Placeholder Team 1",
 		players: [
 			{name:"You should fix this before going live."}
 		]
 	},
-	teamAColor: 'Green',
 	teamBInfo: {
 		name: "Placeholder Team 2",
 		players: [
 			{name:"You should fix this before going live."}
 		]
-	},
-	teamBcolor: 'Purple'
+	}
 }});
 
 const SBShown = nodecg.Replicant('SBShown', {defaultValue: true});
@@ -90,8 +127,9 @@ const SBShown = nodecg.Replicant('SBShown', {defaultValue: true});
 SBData.on('change', newValue => {
 	flavorTextInput.value = newValue.flavorText;
 	
-	teamAColorSelect.value = newValue.teamAColor;
-	teamBColorSelect.value = newValue.teamBcolor;
+	colorSelect.value = newValue.colorInfo.index;
+	teamAColorDisplay.style.backgroundColor = (newValue.swapColorOrder) ? newValue.colorInfo.clrB : newValue.colorInfo.clrA;
+	teamBColorDisplay.style.backgroundColor = (newValue.swapColorOrder) ? newValue.colorInfo.clrA : newValue.colorInfo.clrB;
 
 	teamASelect.value = newValue.teamAInfo.name;
 	teamBSelect.value = newValue.teamBInfo.name;
@@ -104,13 +142,14 @@ SBShown.on('change', newValue => {
 SBUpdateBtn.onclick = () => {
 	let teamAInfo = tourneyData.value.filter(team => team.name === teamASelect.value)[0];
 	let teamBInfo = tourneyData.value.filter(team => team.name === teamBSelect.value)[0];
+	let clrInfo = colors.filter(clr => clr.index === Number(colorSelect.value))[0];
 
 	let dataValue = {
 		flavorText: flavorTextInput.value,
+		colorInfo: clrInfo,
+		swapColorOrder: SBData.value.swapColorOrder,
 		teamAInfo: teamAInfo,
-		teamAColor: teamAColorSelect.value,
 		teamBInfo: teamBInfo,
-		teamBcolor: teamBColorSelect.value
 	}
 
 	SBData.value = dataValue;
@@ -118,6 +157,12 @@ SBUpdateBtn.onclick = () => {
 
 SBShow.onclick = () => { SBShown.value = true; }
 SBHide.onclick = () => { SBShown.value = false; }
+
+// Swap order of colors
+
+clrOrderSwitch.onclick = () => {
+	SBData.value.swapColorOrder = !SBData.value.swapColorOrder;
+};
 
 // Next Teams
 
@@ -159,7 +204,7 @@ beginNextMatchBtn.onclick = () => {
 
 // Add reminders to update info
 
-addSelectChangeReminder(['teamASelect', 'teamBSelect', 'teamAColorSelect', 'teamBColorSelect'], SBUpdateBtn);
+addSelectChangeReminder(['teamASelect', 'teamBSelect', 'colorSelect'], SBUpdateBtn);
 addInputChangeReminder(['flavorTextInput'], SBUpdateBtn);
 
 addSelectChangeReminder(['nextTeamASelect', 'nextTeamBSelect'], nextTeamUpdateBtn);

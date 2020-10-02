@@ -33,6 +33,11 @@
 		.selectContainer {
 			margin: 0 2.5px;
 		}
+
+		.colorDisplay {
+			width: auto;
+			height: 15px;
+		}
 	</style>
 </head>
 <body>
@@ -61,16 +66,17 @@
 				<select id="teamBSelect" class="teamSelector"></select>
 			</div>
 		</div>
-		<div class="horizontalLayout maxWidth">
+		<div class="maxWidth">
 			<div class="selectContainer">
-				<div class="inputLabel">Team A Color</div>
-				<select id="teamAColorSelect" class="colorSelector"></select>
-			</div>
-			<div class="selectContainer">
-				<div class="inputLabel">Team B Color</div>
-				<select id="teamBColorSelect" class="colorSelector"></select>
+				<div class="inputLabel">Colors</div>
+				<select id="colorSelect" class="newColorSelector"></select>
 			</div>
 		</div>
+		<div class="horizontalLayout maxWidth">
+			<div class="colorDisplay" id="teamAColorDisplay" style="background-color: black;"></div>
+			<div class="colorDisplay" id="teamBColorDisplay" style="background-color: white;"></div>
+		</div>
+		<button id="clrOrderSwitch" class="btnBlue maxWidthButton">swap colors</button>
 		<div class="selectContainer">
 			<div class="inputLabel">Flavor Text</div>
 			<input type="text" id="flavorTextInput"></select>
