@@ -126,7 +126,7 @@ function measureText(text, fontFamily, fontSize, maxWidth, useInnerHTML = false)
 const breakMainTextProps = {
 	fontFamily: "'Raleway', 'Kosugi Maru', 'Roboto'",
 	fontSize: '42px',
-	maxWidth: 650
+	maxWidth: 850
 }
 
 function setMainSceneText(text, elem, hasIcon = true, useInnerHTML = false) {
