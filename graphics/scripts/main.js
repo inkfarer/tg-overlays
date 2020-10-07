@@ -1,9 +1,6 @@
 // Team Scores
 
-const teamScores = nodecg.Replicant('teamScores', 'ipl-overlay-controls', {defaultValue: {
-    teamA: 0,
-    teamB: 0
-}});
+const teamScores = nodecg.Replicant('teamScores', 'ipl-overlay-controls');
 
 teamScores.on('change', newValue => {
 	document.querySelector('#teamAScore').setAttribute('text', newValue.teamA);
@@ -12,23 +9,7 @@ teamScores.on('change', newValue => {
 
 // Scoreboard data
 
-const SBData = nodecg.Replicant('SBData', 'ipl-overlay-controls', {defaultValue: {
-	flavorText: 'Flavor Text',
-	teamAInfo: {
-		name: "Placeholder Team 1",
-		players: [
-			{name:"You should fix this before going live."}
-		]
-	},
-	teamAColor: 'Green',
-	teamBInfo: {
-		name: "Placeholder Team 2",
-		players: [
-			{name:"You should fix this before going live."}
-		]
-	},
-	teamBcolor: 'Purple'
-}});
+const SBData = nodecg.Replicant('SBData', 'ipl-overlay-controls');
 
 SBData.on('change', newValue => {
 	document.querySelector('#teamAName').setAttribute('text', newValue.teamAInfo.name);
@@ -42,7 +23,7 @@ SBData.on('change', newValue => {
 
 // Show/hide scoreboard
 
-const SBShown = nodecg.Replicant('SBShown', 'ipl-overlay-controls', {defaultValue: true});
+const SBShown = nodecg.Replicant('SBShown', 'ipl-overlay-controls');
 
 SBShown.on('change', newValue => {
 	var lineClipPath, lineDelay, bgTop, bgEase, bgDelay, flavorOpacity;
@@ -65,4 +46,32 @@ SBShown.on('change', newValue => {
 	gsap.to('.sbBrandLine', {duration: 0.5, clipPath: lineClipPath, ease: 'power2.inOut', delay: lineDelay});
 	gsap.to('.sbBackground', {duration: 0.5, top: bgTop, ease: bgEase, delay: bgDelay});
 	gsap.to('.sbFlavorTextBG', {duration: 0.5, opacity: flavorOpacity, ease: 'power2.inOut', delay: lineDelay});
+});
+
+// Caster names
+
+const casterNames = nodecg.Replicant('casterNames', 'ipl-overlay-controls');
+
+casterNames.on('change', newValue => {
+	let nameArray = newValue.split('&');
+	let bg = document.querySelector('.castersBG');
+	bg.innerHTML = '';
+
+	nameArray.forEach(name => {
+		var elem = document.createElement('fitted-text');
+		var htmlText = name.replace(/\[\[/g, '<span class="pronoun">').replace(/\]\]/g, '</span>');
+		elem.setAttribute('text', htmlText);
+		elem.setAttribute('max-width', '230');
+		elem.setAttribute('align', 'left');
+		elem.setAttribute('useInnerHTML', '');
+		
+		bg.appendChild(elem);
+	});
+});
+
+// Caster name animation
+
+nodecg.listenFor('mainShowCasters', 'ipl-overlay-controls', () => {
+	gsap.fromTo('.castersWrapper', {opacity: 0, y: -25}, {duration: 0.5, y: 0, opacity: 1, ease: 'power2.out'});
+	gsap.to('.castersWrapper', {duration: 0.5, y: 25, opacity: 0, delay: 10.5, ease: 'power2.in'});
 });
