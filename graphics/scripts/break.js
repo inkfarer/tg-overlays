@@ -53,6 +53,17 @@ currentBreakScene.on('change', (newValue, oldValue) => {
 			toggleNextUp(false);
 			toggleStages(true);
 			setAccentColor(accentColors.red, '#B03842');
+			return;
+		default:
+			// go to main scene - if scene is unknown
+			stagesAnimLen = toggleStages(false);
+			if (oldValue === 'maps') {
+				delay = delay + stagesAnimLen;
+			}
+			toggleMainScene(true, delay);
+			toggleNextUp(false);
+			setAccentColor(accentColors.blue, 0.5);
+			return;
 	}
 });
 
