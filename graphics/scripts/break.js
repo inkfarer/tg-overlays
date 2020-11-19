@@ -19,7 +19,7 @@ const accentColors = {
 	}
 };
 
-const currentBreakScene = nodecg.Replicant('currenBreakScene', 'ipl-overlay-controls', { defaultValue: 'mainScene' });
+const currentBreakScene = nodecg.Replicant('currentBreakScene', 'ipl-overlay-controls');
 
 currentBreakScene.on('change', (newValue, oldValue) => {
 	let delay = 0;
