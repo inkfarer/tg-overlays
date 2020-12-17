@@ -5,16 +5,19 @@ const accentColors = {
 	blue: {
 		colorA: '#3E0099',
 		colorB: '#2E0073',
+		rgb: [46, 0, 115],
 		filter: 'invert(20%) sepia(90%) saturate(5356%) hue-rotate(263deg) brightness(58%) contrast(126%)'
 	},
 	orange: {
 		colorA: '#EB8258',
 		colorB: '#C46C49',
+		rgb: [196, 108, 73],
 		filter: 'invert(59%) sepia(84%) saturate(592%) hue-rotate(323deg) brightness(98%) contrast(88%)'
 	},
 	red: {
 		colorA: '#D64550',
 		colorB: '#B03842',
+		rgb: [176, 56, 66],
 		filter: 'invert(45%) sepia(33%) saturate(5064%) hue-rotate(328deg) brightness(86%) contrast(94%)'
 	}
 };
@@ -69,7 +72,12 @@ currentBreakScene.on('change', (newValue, oldValue) => {
 
 function setAccentColor(clr, delay = 0) {
 	gsap.to('.logoAccent', {duration: 1.5, filter: clr.filter, delay: delay});
-	gsap.to(':root', {duration: 1.5, '--bgColor1': clr.colorA, '--bgColor2': clr.colorB, delay: delay});
+	gsap.to(':root', {
+		duration: 1.5,
+		'--bgColor1': clr.colorA,
+		'--bgColor2': clr.colorB,
+		'--transparentBgClr': `rgba(${clr.rgb[0]}, ${clr.rgb[1]}, ${clr.rgb[2]}, 0.5)`,
+		delay: delay});
 }
 
 function toggleMainScene(show, delay = 0) {
@@ -173,13 +181,8 @@ casterNames.on('change', newValue => {
 });
 
 const nowPlaying = nodecg.Replicant('nowPlaying', 'ipl-overlay-controls');
-const nowPlayingManual = nodecg.Replicant('nowPlayingManual', 'ipl-overlay-controls', {
-    defaultValue: {
-        artist: '',
-        song: ''
-    }
-});
-const mSongEnabled = nodecg.Replicant('mSongEnabled', 'ipl-overlay-controls', {defaultValue: false});
+const nowPlayingManual = nodecg.Replicant('nowPlayingManual', 'ipl-overlay-controls');
+const mSongEnabled = nodecg.Replicant('mSongEnabled', 'ipl-overlay-controls');
 
 function checkStringEmptyOrUndef(string) {
 	string = String(string);
