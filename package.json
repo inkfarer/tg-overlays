@@ -1,6 +1,7 @@
 {
 "name": "tg-overlays",
 "version": "0.0.0",
+"compatibleDashboardVersion": "^2.0.0",
 "description": "Overlays Testing Grounds, a bi-weekly Splatoon tournament.",
 "homepage": "",
 "author": {
